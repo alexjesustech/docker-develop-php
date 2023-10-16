@@ -19,7 +19,7 @@ rm -rf .git
 
 Criar e iniciar contêineres configurados no arquivo ```docker-compose.yml``` com o comando a seguir: 
 ```shell
-docker-compose up -d
+docker-compose build && docker-compose up -d
 ```
 Em seguida acesse o endereço http://localhost:
 

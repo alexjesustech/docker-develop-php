@@ -15,15 +15,17 @@ Clone o Codeigniter (v4.4.1):
 git clone -b v4.4.1 --single-branch git@github.com:codeigniter4/appstarter.git project
 ```
 
+Agora execute o container novamente:
+```shell
+docker-compose start
+```
+
 Instale as dependencies do Codeigniter: 
 ```shell
 composer install
 ```
 
-E depois execute novamente o container:
-```shell
-docker-compose up -d
-```
+Em seguida acesse o endereço http://localhost:
 
 Documentação do CodeIgniter4
 https://codeigniter.com/user_guide/index.html
