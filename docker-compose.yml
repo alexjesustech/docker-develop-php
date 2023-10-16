@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  php-apache:
+    build:
+      context: .
+      dockerfile: etc/php8.2.11-apache-bookworm.dockerfile
+      args:
+        user: alexjesus
+        uid: 1000
+    restart: unless-stopped
+    working_dir: /var/www/html
+    environment:
+      # Codeigniter4
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+    volumes:
+      - ./project:/var/www/html
+      #- ${HOME}/.ssh:/root/.ssh
+    ports:
+      - '80:80'
