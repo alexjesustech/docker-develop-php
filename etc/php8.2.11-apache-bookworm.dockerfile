@@ -6,7 +6,19 @@ FROM php:8.2.11-apache-bookworm
 ARG user
 ARG uid
 
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer
+RUN mkdir -p /home/$user/project/public
+RUN chown -R $user:$user /home/$user
+
+# Defini diretório de trabalho
+WORKDIR /home/$user/project
+
+ENV APACHE_DOCUMENT_ROOT /home/$user/project/public
+RUN sed -i -e 's/Listen 80/Listen 80\nServerName localhost/' /etc/apache2/ports.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN a2enmod rewrite headers
 
 # Atualiza a lista de pacotes
 RUN apt-get update
@@ -40,23 +52,12 @@ RUN docker-php-ext-enable redis
 RUN pecl install xdebug-3.2.2
 RUN docker-php-ext-enable xdebug
 
-RUN sed -i -e 's/Listen 80/Listen 80\nServerName localhost/' /etc/apache/ports.conf
-RUN a2enmod rewrite
-RUN a2enmod headers
-
 COPY etc/php/local.ini /usr/local/etc/php/conf.d/local.ini
-COPY etc/apache/site.conf /etc/apache/sites-available/000-default.conf
+#COPY etc/apache/vhost.conf /etc/apache/sites-available/000-default.conf
 
-# Cria usuário do sistema para executar comandos do Composer
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer
-RUN chown -R $user:$user /home/$user
-
-# Defini diretório de trabalho
-WORKDIR /var/www/html
+#RUN chown -R www-data:www-data /var/www
 
 USER $user
 
 EXPOSE 80
-
 CMD ["apache2-foreground"]

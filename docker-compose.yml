@@ -8,12 +8,8 @@ services:
         user: alexjesus
         uid: 1000
     restart: unless-stopped
-    working_dir: /var/www/html
-    environment:
-      # Codeigniter4
-      - APACHE_DOCUMENT_ROOT=/var/www/html/public
     volumes:
-      - ./project:/var/www/html
+      - ./project:/home/alexjesus/project
       #- ${HOME}/.ssh:/root/.ssh
     ports:
       - '80:80'
