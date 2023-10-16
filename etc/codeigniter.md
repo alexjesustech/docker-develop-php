@@ -22,6 +22,11 @@ docker-compose start
 
 Instale as dependencies do Codeigniter: 
 ```shell
+chown -R $(id -un):www-data /home/$(id -un)/project
+```
+
+Instale as dependencies do Codeigniter: 
+```shell
 composer install
 ```
 
